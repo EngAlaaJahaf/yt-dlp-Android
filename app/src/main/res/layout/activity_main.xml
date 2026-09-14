@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView android:text="⬇️ محمل الفيديو - yt-dlp" android:textSize="18sp" android:textStyle="bold"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp">
+        <EditText android:id="@+id/urlEdit" android:hint="الصق الرابط هنا" android:layout_weight="1"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:inputType="textUri" />
+        <Button android:id="@+id/pasteBtn" android:text="📋" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
+        <Spinner android:id="@+id/qualitySpinner" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" />
+        <Spinner android:id="@+id/formatSpinner" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
+        <EditText android:id="@+id/pathEdit" android:hint="مسار التنزيل" android:layout_weight="1"
+            android:layout_width="0dp" android:layout_height="wrap_content" android:textSize="12sp" android:maxLines="1" />
+        <Button android:id="@+id/chooseFolderBtn" android:text="📁 استعراض" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <Button android:id="@+id/resetPathBtn" android:text="🔄" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ProgressBar android:id="@+id/progress" style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:max="100" />
+
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
+        <Button android:id="@+id/downloadBtn" android:text="⬇️ تحميل الآن" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" />
+        <Button android:id="@+id/stopBtn" android:text="⏹ إيقاف" android:layout_width="wrap_content" android:layout_height="wrap_content" android:enabled="false" />
+    </LinearLayout>
+
+    <Button android:id="@+id/openFolderBtn" android:text="📂 فتح مجلد التحميل" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" />
+
+    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
+        <TextView android:id="@+id/versionText" android:text="النسخة: ..." android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_gravity="center_vertical" />
+
+        <Button
+            android:id="@+id/updateBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔄 تحديث المحرك" />
+    </LinearLayout>
+
+    <TextView android:text="السجل:" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" />
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:background="#0f1117" android:layout_marginTop="4dp">
+        <TextView android:id="@+id/log" android:textColor="#d6deeb" android:fontFamily="monospace" android:textSize="11sp"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="8dp" />
+    </ScrollView>
+
+</LinearLayout>

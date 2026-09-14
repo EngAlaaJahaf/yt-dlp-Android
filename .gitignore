@@ -1,0 +1,51 @@
+# Gradle
+.gradle/
+build/
+app/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local configuration
+local.properties
+*.jks
+*.keystore
+*.jks.orig
+release-key.jks
+release-key.jks.orig
+release-key2.jks
+release-key2.jks.orig
+keystore.properties
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk.idsig
+
+# Logs
+*.log
+build_log.txt
+hs_err_pid*
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Signing secrets (never commit)
+keystore.properties
+*/keystore.properties
+
+
+# Signing secrets — never commit
+keystore.properties
+release-key.jks
+release-key2.jks
+release-key.jks.orig
+release-key2.jks.orig
+
+# Build outputs
+*.apk
+app/build/
+build/
