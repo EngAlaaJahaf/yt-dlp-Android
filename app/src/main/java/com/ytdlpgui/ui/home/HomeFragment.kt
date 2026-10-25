@@ -577,11 +577,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun busyUi(busy: Boolean, isDownloading: Boolean, isPaused: Boolean) {
-        android.util.Log.d(
-            "YTDLP_STATE",
-            "busyUi busy=$busy dl=$isDownloading paused=$isPaused " +
-                "prog=${binding.progress.progress}"
-        )
         binding.urlEdit.isEnabled = !busy
         binding.qualitySpinner.isEnabled = !busy
         binding.formatSpinner.isEnabled = !busy

@@ -16,6 +16,7 @@
 ## المحتويات
 
 - [نظرة عامة](#نظرة-عامة)
+- [لقطات الشاشة](#لقطات-الشاشة)
 - [المزايا](#المزايا)
 - [المتطلبات](#المتطلبات)
 - [البدء السريع](#البدء-السريع)
@@ -43,6 +44,25 @@
 - **معرّف الحزمة:** `com.ytdlpgui`
 - **الحد الأدنى:** Android 7.0 (API 24)
 - **الهدف:** Android 14 (API 34)
+
+---
+
+## لقطات الشاشة
+
+<table>
+  <tr>
+    <td align="center" width="50%"><b>الرئيسية</b><br>
+      <img src="docs/screenshots/01-home.png" width="320" alt="الشاشة الرئيسية"></td>
+    <td align="center" width="50%"><b>التنزيلات</b><br>
+      <img src="docs/screenshots/02-downloads.png" width="320" alt="تبويب التنزيلات"></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><b>المكتبة</b><br>
+      <img src="docs/screenshots/03-library.png" width="320" alt="تبويب المكتبة"></td>
+    <td align="center" width="50%"><b>الإعدادات</b><br>
+      <img src="docs/screenshots/04-settings.png" width="320" alt="تبويب الإعدادات"></td>
+  </tr>
+</table>
 
 ---
 
