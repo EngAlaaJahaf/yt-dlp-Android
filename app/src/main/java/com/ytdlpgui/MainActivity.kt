@@ -1,327 +1,311 @@
 package com.ytdlpgui
 
-import android.R
-import android.content.ClipboardManager
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.DocumentsContract
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import com.ytdlpgui.databinding.ActivityMainBinding
-
-import com.yausername.youtubedl_android.YoutubeDL
-import com.yausername.youtubedl_android.YoutubeDLRequest
-import com.yausername.ffmpeg.FFmpeg
-
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.ytdlpgui.databinding.ActivityMainBinding
+import com.ytdlpgui.ui.MainViewModel
+import com.ytdlpgui.ui.downloads.DownloadsFragment
+import com.ytdlpgui.ui.home.HomeFragment
+import com.ytdlpgui.ui.library.LibraryFragment
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
-    private val downloadProcessId = "yt_dlp_download_task"
-    private var isDownloading = false
-    private var isInitialized = false
-    private val initReady = CompletableDeferred<Boolean>()
+    private lateinit var viewModel: MainViewModel
 
-    // مستعرض اختيار المجلدات من النظام
-    private val dirPickerLauncher = registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
-        uri?.let {
-            try {
-                contentResolver.takePersistableUriPermission(
-                    it,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                )
-            } catch (_: Exception) {}
+    private lateinit var homeFragment: HomeFragment
+    private lateinit var downloadsFragment: DownloadsFragment
+    private lateinit var libraryFragment: LibraryFragment
+    private lateinit var settingsFragment: com.ytdlpgui.ui.settings.SettingsFragment
 
-            val path = getPathFromTreeUri(it)
-            if (path != null) {
-                binding.pathEdit.setText(path)
-                Toast.makeText(this, "تم اختيار المجلد: $path", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "تم اختيار المجلد", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+    private var currentTabIndex = 0
 
-    private fun getPathFromTreeUri(uri: Uri): String? {
-        try {
-            val docId = DocumentsContract.getTreeDocumentId(uri)
-            val split = docId.split(":")
-            val type = split[0]
-            val relativePath = if (split.size > 1) split[1] else ""
-            
-            return if ("primary".equals(type, ignoreCase = true)) {
-                if (relativePath.isNotEmpty()) {
-                    "${Environment.getExternalStorageDirectory().absolutePath}/$relativePath"
-                } else {
-                    Environment.getExternalStorageDirectory().absolutePath
-                }
-            } else {
-                // للبطاقة الخارجية SD Card
-                "/storage/$type/$relativePath"
-            }
-        } catch (e: Exception) {
-            return null
-        }
+    companion object {
+        private const val TAG_HOME = "tag_home"
+        private const val TAG_DOWNLOADS = "tag_downloads"
+        private const val TAG_LIBRARY = "tag_library"
+        private const val TAG_SETTINGS = "tag_settings"
+        const val EXTRA_TAB_INDEX = "extra_tab_index"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        com.ytdlpgui.data.settings.ThemeMode.apply(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val qualities = arrayOf("الأفضل تلقائياً (best)", "1080p", "720p", "480p", "360p")
-        val qualityAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, qualities)
-        binding.qualitySpinner.adapter = qualityAdapter
-
-        val formats = arrayOf(
-            "فيديو MP4",
-            "فيديو MKV",
-            "فيديو WebM",
-            "صوت MP3",
-            "صوت M4A",
-            "صوت OPUS",
-            "صوت FLAC",
-            "صوت WAV"
-        )
-        val formatAdapter = ArrayAdapter(this, R.layout.simple_spinner_dropdown_item, formats)
-        binding.formatSpinner.adapter = formatAdapter
-
-        // مسار التنزيل الافتراضي هو مجلد Downloads/yt-dlp
-        val defaultDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "yt-dlp")
-        binding.pathEdit.setText(defaultDir.absolutePath)
-
-        // زر استعراض المجلدات
-        binding.chooseFolderBtn.setOnClickListener {
-            dirPickerLauncher.launch(null)
-        }
-
-        // زر إعادة ضبط المسار للافتراضي
-        binding.resetPathBtn.setOnClickListener {
-            binding.pathEdit.setText(defaultDir.absolutePath)
-            Toast.makeText(this, "تمت استعادة المسار الافتراضي", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.log.append("⏳ يتم تجهيز المحرك...\n")
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            val ok = try {
-                YoutubeDL.getInstance().init(applicationContext)
-                FFmpeg.getInstance().init(applicationContext)
-                true
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    binding.log.append("❌ فشل تهيئة المحرك: ${e.message}\n")
-                }
-                false
-            }
-            isInitialized = ok
-            initReady.complete(ok)
-            if (ok) {
-                withContext(Dispatchers.Main) {
-                    val ver = try { YoutubeDL.getInstance().versionName(applicationContext) ?: "جاهز" } catch(e: Exception) { "جاهز" }
-                    binding.versionText.text = "النسخة: $ver"
-                    binding.log.append("✅ محرك yt-dlp و FFmpeg جاهزان (الإصدار: $ver)\n")
+        viewModel = ViewModelProvider(
+            this,
+            viewModelFactory {
+                initializer {
+                    MainViewModel(
+                        engine = com.ytdlpgui.data.engine.DownloadEngine(applicationContext),
+                        store = com.ytdlpgui.data.db.RoomDownloadStore(applicationContext),
+                        settings = com.ytdlpgui.data.settings.SettingsRepository(applicationContext),
+                        startService = { com.ytdlpgui.service.DownloadService.start(applicationContext) },
+                        stopService = { com.ytdlpgui.service.DownloadService.stop(applicationContext) }
+                    )
                 }
             }
+        )[MainViewModel::class.java]
+
+        setupToolbar()
+        setupFragments(savedInstanceState)
+        setupBottomNav()
+        setupBackPressHandler()
+        setupSplash(savedInstanceState)
+        observeDownloadsBadge()
+
+        if (savedInstanceState != null) {
+            currentTabIndex = savedInstanceState.getInt("saved_tab_index", 0)
+            binding.bottomNav.selectedItemId = when (currentTabIndex) {
+                1 -> R.id.nav_downloads
+                2 -> R.id.nav_library
+                3 -> R.id.nav_settings
+                else -> R.id.nav_home
+            }
+            switchTab(currentTabIndex)
         }
 
-        binding.pasteBtn.setOnClickListener {
-            val clip = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val text = clip.primaryClip?.getItemAt(0)?.text?.toString() ?: ""
-            binding.urlEdit.setText(text)
-        }
-
-        binding.downloadBtn.setOnClickListener { startDownload() }
-        binding.stopBtn.setOnClickListener { stopDownload() }
-        binding.updateBtn.setOnClickListener { startUpdate() }
-
-        binding.openFolderBtn.setOnClickListener {
-            openFolder(getDownloadDir())
-        }
+        handleSharedText(intent)
+        handleInitialTab(intent)
     }
 
-    private fun openFolder(folder: File) {
-        if (!folder.exists()) folder.mkdirs()
-
-        // 1. محاولة فتح المجلد بواسطة FileProvider عبر مدير ملفات النظام
-        try {
-            val uri = FileProvider.getUriForFile(this, "${applicationContext.packageName}.provider", folder)
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, "vnd.android.document/directory")
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            startActivity(intent)
-            return
-        } catch (_: Exception) {}
-
-        // 2. محاولة أخرى عبر intent فتح المجلدات العام
-        try {
-            val uri = FileProvider.getUriForFile(this, "${applicationContext.packageName}.provider", folder)
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, "*/*")
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            startActivity(intent)
-            return
-        } catch (_: Exception) {}
-
-        // 3. فتح شاشة التنزيلات العامة
-        try {
-            val intent = Intent(android.app.DownloadManager.ACTION_VIEW_DOWNLOADS).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            startActivity(intent)
-            return
-        } catch (_: Exception) {}
-
-        Toast.makeText(this, "المسار: ${folder.absolutePath}", Toast.LENGTH_LONG).show()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("saved_tab_index", currentTabIndex)
     }
 
-    private fun getDownloadDir(): File {
-        val customPath = binding.pathEdit.text.toString().trim()
-        val dir = if (customPath.isNotEmpty()) {
-            File(customPath)
-        } else {
-            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "yt-dlp")
-        }
-        if (!dir.exists()) dir.mkdirs()
-        return dir
-    }
-
-    private fun startDownload() {
-        val url = binding.urlEdit.text.toString().trim()
-        if (url.isEmpty()) {
-            Toast.makeText(this, "الصق رابطاً أولاً", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        lifecycleScope.launch(Dispatchers.Main) {
-            if (!isInitialized) {
-                binding.log.append("⏳ انتظر التهيئة...\n")
-                try { initReady.await() } catch (_: Exception) {}
-            }
-            if (!isInitialized || isDownloading) return@launch
-
-            toggleUiState(downloading = true)
-            binding.log.append("🚀 بدء التحميل: $url\n")
-
-            withContext(Dispatchers.IO) {
-                try {
-                    val request = YoutubeDLRequest(url)
-                    request.addOption("-o", "${getDownloadDir().absolutePath}/%(title)s.%(ext)s")
-                    request.addOption("--no-mtime") // لحل مشاكل التواريخ على أندرويد
-
-                    val quality = binding.qualitySpinner.selectedItem.toString()
-                    val formatSelection = binding.formatSpinner.selectedItem.toString()
-
-                    if (formatSelection.contains("صوت")) {
-                        // وضع استخراج الصوت
-                        request.addOption("-x")
-                        when {
-                            formatSelection.contains("MP3") -> request.addOption("--audio-format", "mp3")
-                            formatSelection.contains("M4A") -> request.addOption("--audio-format", "m4a")
-                            formatSelection.contains("OPUS") -> request.addOption("--audio-format", "opus")
-                            formatSelection.contains("FLAC") -> request.addOption("--audio-format", "flac")
-                            formatSelection.contains("WAV") -> request.addOption("--audio-format", "wav")
-                        }
-                    } else {
-                        // وضع الفيديو
-                        val resSelection = when {
-                            quality.contains("1080") -> "bestvideo[height<=1080]+bestaudio/best[height<=1080]/best"
-                            quality.contains("720") -> "bestvideo[height<=720]+bestaudio/best[height<=720]/best"
-                            quality.contains("480") -> "bestvideo[height<=480]+bestaudio/best[height<=480]/best"
-                            quality.contains("360") -> "bestvideo[height<=360]+bestaudio/best[height<=360]/best"
-                            else -> "bestvideo+bestaudio/best" // الأفضل تلقائياً
-                        }
-                        request.addOption("-f", resSelection)
-
-                        when {
-                            formatSelection.contains("MP4") -> request.addOption("--merge-output-format", "mp4")
-                            formatSelection.contains("MKV") -> request.addOption("--merge-output-format", "mkv")
-                            formatSelection.contains("WebM") -> request.addOption("--merge-output-format", "webm")
-                        }
-                    }
-
-                    YoutubeDL.getInstance().execute(request, downloadProcessId) { progress, _, text ->
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            binding.progress.progress = progress.toInt()
-                            if (text.isNotBlank() && !text.contains("[download]")) {
-                                binding.log.append("$text\n")
-                            } else if (text.isNotBlank() && progress.toInt() % 10 == 0) {
-                                binding.log.append("التحميل: ${progress.toInt()}%\n")
-                            }
-                        }
-                    }
-                    withContext(Dispatchers.Main) {
-                        binding.log.append("✅ اكتمل بنجاح.\n")
-                        toggleUiState(false)
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        if (e.message?.contains("destroy") == true) {
-                            binding.log.append("⏹ تم الإلغاء.\n")
-                        } else {
-                            binding.log.append("❌ خطأ: ${e.message}\n")
-                        }
-                        toggleUiState(false)
-                    }
+    private fun observeDownloadsBadge() {
+        lifecycleScope.launch {
+            com.ytdlpgui.data.db.DownloadDatabase.get(applicationContext).downloadDao().recentFlow().collect { list ->
+                val activeCount = list.count {
+                    it.status == com.ytdlpgui.data.db.DownloadStatus.RUNNING ||
+                    it.status == com.ytdlpgui.data.db.DownloadStatus.QUEUED
+                }
+                val badge = binding.bottomNav.getOrCreateBadge(R.id.nav_downloads)
+                if (activeCount > 0) {
+                    badge.isVisible = true
+                    badge.number = activeCount
+                    badge.backgroundColor = getColor(R.color.vidmate_red)
+                } else {
+                    badge.isVisible = false
                 }
             }
         }
     }
 
-    private fun stopDownload() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                YoutubeDL.getInstance().destroyProcessById(downloadProcessId)
-                withContext(Dispatchers.Main) { toggleUiState(false) }
-            } catch (e: Exception) { }
+    private fun setupSplash(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) return
+        binding.splashOverlay.visibility = android.view.View.VISIBLE
+        val totalMs = 2600L
+        val start = android.os.SystemClock.elapsedRealtime()
+        binding.splashSkipBtn.setOnClickListener { binding.splashOverlay.animate().alpha(0f).setDuration(220L).withEndAction { binding.splashOverlay.visibility = android.view.View.GONE }.start() }
+        lifecycleScope.launch {
+            while (android.os.SystemClock.elapsedRealtime() - start < totalMs) {
+                val elapsed = android.os.SystemClock.elapsedRealtime() - start
+                val remain = (totalMs - elapsed).coerceAtLeast(0)
+                binding.splashCountdown.countText = ((remain / 1000) + 1).coerceAtMost(3).toString()
+                binding.splashCountdown.progress = elapsed.toFloat() / totalMs
+                kotlinx.coroutines.delay(50)
+            }
+            binding.splashOverlay.animate().alpha(0f).setDuration(220L)
+                .withEndAction { binding.splashOverlay.visibility = android.view.View.GONE }
+                .start()
         }
     }
 
-    private fun startUpdate() {
-        binding.updateBtn.isEnabled = false
-        binding.log.append("⏳ جارٍ التحقق من تحديثات yt-dlp...\n")
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val status = YoutubeDL.getInstance().updateYoutubeDL(applicationContext, YoutubeDL.UpdateChannel.STABLE)
-                val ver = YoutubeDL.getInstance().versionName(applicationContext) ?: ""
-                withContext(Dispatchers.Main) {
-                    binding.versionText.text = "النسخة: $ver"
-                    binding.log.append("✅ حالة التحديث: ${status?.name} — الإصدار: $ver\n")
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleSharedText(intent)
+        handleInitialTab(intent)
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.inflateMenu(R.menu.top_menu)
+        setupBrandGradients()
+        refreshThemeIcon()
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_theme -> {
+                    toggleTheme()
+                    true
                 }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    binding.log.append("⚠️ لا يوجد تحديث أو فشل الاتصال: ${e.message}\n")
+                R.id.action_settings -> {
+                    binding.bottomNav.selectedItemId = R.id.nav_settings
+                    true
                 }
-            } finally {
-                withContext(Dispatchers.Main) {
-                    binding.updateBtn.isEnabled = true
+                R.id.action_update_engine -> {
+                    viewModel.startUpdateEngine()
+                    true
                 }
+                else -> false
             }
         }
     }
 
-    private fun toggleUiState(downloading: Boolean) {
-        isDownloading = downloading
-        binding.downloadBtn.isEnabled = !downloading
-        binding.stopBtn.isEnabled = downloading
-        binding.urlEdit.isEnabled = !downloading
-        binding.qualitySpinner.isEnabled = !downloading
-        binding.formatSpinner.isEnabled = !downloading
-        binding.pathEdit.isEnabled = !downloading
-        binding.chooseFolderBtn.isEnabled = !downloading
-        binding.resetPathBtn.isEnabled = !downloading
+    private fun setupBrandGradients() {
+        val startColor = android.graphics.Color.parseColor("#00B36E")
+        val endColor = android.graphics.Color.parseColor("#1C63E1")
+        applyTextGradient(binding.tvBrandCatch, startColor, endColor)
+        applyTextGradient(binding.tvSplashCatch, startColor, endColor)
+    }
+
+    private fun applyTextGradient(textView: android.widget.TextView, startColor: Int, endColor: Int) {
+        textView.post {
+            val width = textView.paint.measureText(textView.text.toString())
+            if (width > 0) {
+                val shader = android.graphics.LinearGradient(
+                    0f, 0f, width, 0f,
+                    startColor, endColor,
+                    android.graphics.Shader.TileMode.CLAMP
+                )
+                textView.paint.shader = shader
+                textView.invalidate()
+            }
+        }
+    }
+
+    private fun toggleTheme() {
+        val dark = !com.ytdlpgui.data.settings.ThemeMode.isDark(this)
+        lifecycleScope.launch {
+            com.ytdlpgui.data.settings.SettingsRepository(applicationContext).saveThemeDark(dark)
+            com.ytdlpgui.data.settings.ThemeMode.apply(applicationContext)
+            refreshThemeIcon()
+            setupBrandGradients()
+            com.ytdlpgui.ui.common.AppToast.show(
+                this@MainActivity,
+                if (dark) com.ytdlpgui.R.string.msg_theme_dark_on else com.ytdlpgui.R.string.msg_theme_dark_off
+            )
+        }
+    }
+
+    private fun refreshThemeIcon() {
+        val item = binding.toolbar.menu.findItem(R.id.action_theme) ?: return
+        val dark = com.ytdlpgui.data.settings.ThemeMode.isDark(this)
+        item.setIcon(if (dark) R.drawable.ic_sun else R.drawable.ic_moon)
+    }
+
+    private fun setupFragments(savedInstanceState: Bundle?) {
+        val fm = supportFragmentManager
+        val existingHome = fm.findFragmentByTag(TAG_HOME) as? HomeFragment
+        val existingDownloads = fm.findFragmentByTag(TAG_DOWNLOADS) as? DownloadsFragment
+        val existingLibrary = fm.findFragmentByTag(TAG_LIBRARY) as? LibraryFragment
+        val existingSettings = fm.findFragmentByTag(TAG_SETTINGS) as? com.ytdlpgui.ui.settings.SettingsFragment
+
+        homeFragment = existingHome ?: HomeFragment()
+        downloadsFragment = existingDownloads ?: DownloadsFragment()
+        libraryFragment = existingLibrary ?: LibraryFragment()
+        settingsFragment = existingSettings ?: com.ytdlpgui.ui.settings.SettingsFragment()
+
+        if (savedInstanceState == null) {
+            fm.beginTransaction()
+                .add(R.id.fragmentContainer, homeFragment, TAG_HOME)
+                .add(R.id.fragmentContainer, downloadsFragment, TAG_DOWNLOADS).hide(downloadsFragment)
+                .add(R.id.fragmentContainer, libraryFragment, TAG_LIBRARY).hide(libraryFragment)
+                .add(R.id.fragmentContainer, settingsFragment, TAG_SETTINGS).hide(settingsFragment)
+                .commit()
+        }
+    }
+
+    private fun setupBottomNav() {
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    switchTab(0)
+                    true
+                }
+                R.id.nav_downloads -> {
+                    switchTab(1)
+                    true
+                }
+                R.id.nav_library -> {
+                    switchTab(2)
+                    true
+                }
+                R.id.nav_settings -> {
+                    switchTab(3)
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun switchTab(index: Int) {
+        val transaction = supportFragmentManager.beginTransaction()
+        when (index) {
+            0 -> {
+                transaction.show(homeFragment).hide(downloadsFragment).hide(libraryFragment).hide(settingsFragment)
+                binding.appLogo.visibility = android.view.View.VISIBLE
+                binding.brandWordmark.visibility = android.view.View.VISIBLE
+                binding.toolbarTitle.visibility = android.view.View.GONE
+            }
+            1 -> {
+                transaction.show(downloadsFragment).hide(homeFragment).hide(libraryFragment).hide(settingsFragment)
+                downloadsFragment.onTabSelected()
+                binding.appLogo.visibility = android.view.View.GONE
+                binding.brandWordmark.visibility = android.view.View.GONE
+                binding.toolbarTitle.visibility = android.view.View.VISIBLE
+                binding.toolbarTitle.text = getString(R.string.downloads_title)
+            }
+            2 -> {
+                transaction.show(libraryFragment).hide(homeFragment).hide(downloadsFragment).hide(settingsFragment)
+                libraryFragment.onTabSelected()
+                binding.appLogo.visibility = android.view.View.GONE
+                binding.brandWordmark.visibility = android.view.View.GONE
+                binding.toolbarTitle.visibility = android.view.View.VISIBLE
+                binding.toolbarTitle.text = getString(R.string.library_title)
+            }
+            3 -> {
+                transaction.show(settingsFragment).hide(homeFragment).hide(downloadsFragment).hide(libraryFragment)
+                binding.appLogo.visibility = android.view.View.GONE
+                binding.brandWordmark.visibility = android.view.View.GONE
+                binding.toolbarTitle.visibility = android.view.View.VISIBLE
+                binding.toolbarTitle.text = getString(R.string.settings_title)
+            }
+        }
+        transaction.commit()
+        currentTabIndex = index
+    }
+
+    private fun setupBackPressHandler() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (currentTabIndex != 0) {
+                    binding.bottomNav.selectedItemId = R.id.nav_home
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
+    }
+
+    private fun handleInitialTab(intent: Intent?) {
+        val tab = intent?.getIntExtra(EXTRA_TAB_INDEX, -1) ?: return
+        if (tab in 0..3) {
+            when (tab) {
+                0 -> binding.bottomNav.selectedItemId = R.id.nav_home
+                1 -> binding.bottomNav.selectedItemId = R.id.nav_downloads
+                2 -> binding.bottomNav.selectedItemId = R.id.nav_library
+                3 -> binding.bottomNav.selectedItemId = R.id.nav_settings
+            }
+        }
+    }
+
+    private fun handleSharedText(intent: Intent?) {
+        if (intent?.action != Intent.ACTION_SEND) return
+        val text = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return
+        val url = com.ytdlpgui.data.model.UrlSanitizer.sanitize(text) ?: return
+        binding.bottomNav.selectedItemId = R.id.nav_home
+        homeFragment.setUrl(url)
     }
 }

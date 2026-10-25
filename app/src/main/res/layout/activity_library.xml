@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/libraryHeader"
+        android:text="@string/library_title"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="56dp" />
+
+    <TextView
+        android:id="@+id/emptyText"
+        android:text="@string/library_empty"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/libraryList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

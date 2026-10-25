@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?android:attr/colorBackground"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="84dp">
+
+    <!-- ═══ شريط البحث في المكتبة + زر التحديث (مطابق للموكب) ═══ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_url_input"
+        android:paddingStart="12dp"
+        android:paddingEnd="6dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_search"
+            app:tint="?android:attr/textColorTertiary"
+            android:contentDescription="@null" />
+
+        <EditText
+            android:id="@+id/libSearchInput"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="@string/lib_search_hint"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:background="@null"
+            android:textSize="13sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="6dp"
+            android:maxLines="1"
+            android:importantForAutofill="no" />
+
+        <ImageButton
+            android:id="@+id/refreshBtn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_sync"
+            android:background="@drawable/bg_stepper_btn"
+            android:contentDescription="@string/btn_refresh"
+            app:tint="?android:attr/textColorSecondary"
+            android:scaleType="centerInside" />
+    </LinearLayout>
+
+    <!-- ═══ شرائح تصنيف المحتوى: الكل / فيديو / صوت (مطابق للموكب) ═══ -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/libFilterGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        app:singleSelection="true"
+        app:selectionRequired="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFilterAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_all"
+            android:checked="true"
+            style="@style/Widget.App.Chip" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFilterVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_video"
+            app:chipIcon="@drawable/ic_video"
+            style="@style/Widget.App.Chip" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFilterAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_audio"
+            app:chipIcon="@drawable/ic_music"
+            style="@style/Widget.App.Chip" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- ═══ بطاقة الحالة الفارغة ═══ -->
+    <LinearLayout
+        android:id="@+id/emptyContainer"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card"
+        android:padding="32dp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_nav_library"
+            app:tint="?android:attr/textColorTertiary"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/emptyText"
+            android:text="@string/library_empty"
+            android:textSize="14sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!-- ═══ قائمة الوسائط (شبكة عمودين) ═══ -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/libraryList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:padding="2dp"
+        android:scrollbars="vertical" />
+
+</LinearLayout>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/border_card"
+    app:cardBackgroundColor="?attr/colorSurface">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- حاوية الصورة المصغّرة مع زر التشغيل وشارة المدة (مطابق للصورة 1) -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="105dp"
+            android:background="@drawable/bg_thumb_gradient">
+
+            <ImageView
+                android:id="@+id/thumbnailImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="@null" />
+
+            <!-- دائرة التشغيل الشفافة المركزية -->
+            <FrameLayout
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_play_circle">
+
+                <ImageView
+                    android:id="@+id/centerPlayIcon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_play"
+                    app:tint="@color/vidmate_red"
+                    android:contentDescription="@string/btn_play" />
+            </FrameLayout>
+
+            <!-- شارة الحجم في زاوية البداية السفلية (منفصلة عن المدة) -->
+            <TextView
+                android:id="@+id/sizeBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_badge_pill"
+                android:backgroundTint="#B308090C"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:paddingStart="7dp"
+                android:paddingEnd="7dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                tools:text="1.2 GB" />
+
+            <!-- شارة المدة الزمنية في زاوية النهاية السفلية (مثل: 9:02) -->
+            <TextView
+                android:id="@+id/durationBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="6dp"
+                android:background="@drawable/bg_badge_pill"
+                android:backgroundTint="#B308090C"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:paddingStart="7dp"
+                android:paddingEnd="7dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:visibility="gone"
+                tools:text="9:02"
+                tools:visibility="visible" />
+        </FrameLayout>
+
+        <!-- بيانات الملف: العنوان والبيانات الوصفية -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="9dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/fileName"
+                android:textSize="12.5sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:minHeight="35dp"
+                android:ellipsize="end"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="تجول سياحي في صنعاء القديمة بدقة 8K" />
+
+            <TextView
+                android:id="@+id/fileMeta"
+                android:textSize="10.5sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:alpha="0.85"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                tools:text="فيديو · 1.2 GB · WEBM" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

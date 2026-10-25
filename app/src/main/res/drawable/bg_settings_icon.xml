@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- خلفية الأيقونة المربعة في صفوف الإعدادات (37×37، زوايا 11dp) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/settings_icon_bg" />
+    <corners android:radius="11dp" />
+</shape>

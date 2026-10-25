@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="vertical"
+    android:clipToPadding="false"
+    android:background="?android:attr/colorBackground">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:paddingBottom="80dp">
+
+        <!-- ═══ حبة البحث بأسلوب VidMate (مطابق للموكب) ═══ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_url_input"
+            android:paddingStart="12dp"
+            android:paddingEnd="6dp">
+
+            <ImageView
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:src="@drawable/ic_search"
+                app:tint="?android:attr/textColorTertiary"
+                android:contentDescription="@null" />
+
+            <EditText
+                android:id="@+id/urlEdit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="@string/home_search_hint"
+                android:imeOptions="actionDone"
+                android:inputType="textUri"
+                android:background="@null"
+                android:textSize="13.5sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="6dp"
+                android:maxLines="1"
+                android:importantForAutofill="no" />
+
+            <ImageView
+                android:id="@+id/bounceIcon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_download"
+                app:tint="@color/vidmate_red"
+                android:contentDescription="@null" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="22dp"
+                android:background="@color/border_card"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="4dp" />
+
+            <TextView
+                android:id="@+id/btnSearchGo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home_search_go"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/vidmate_red"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <ImageButton
+                android:id="@+id/pasteBtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_paste"
+                android:background="@drawable/bg_stepper_btn"
+                android:contentDescription="@string/btn_paste"
+                app:tint="?android:attr/textColorSecondary"
+                android:scaleType="centerInside" />
+
+            <ImageButton
+                android:id="@+id/infoBtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_info"
+                android:background="@drawable/bg_stepper_btn"
+                android:contentDescription="@string/btn_info"
+                app:tint="?android:attr/textColorSecondary"
+                android:scaleType="centerInside"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- ═══ صف اختيار الجودة (مطابق للموكب) ═══ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_quality"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorSecondary"
+                android:layout_marginEnd="10dp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/qualityChipGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip360"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="360p"
+                    style="@style/Widget.App.Chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip720"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="720p"
+                    style="@style/Widget.App.Chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip1080"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1080p"
+                    android:checked="true"
+                    style="@style/Widget.App.Chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip4k"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4K"
+                    style="@style/Widget.App.Chip" />
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
+
+        <!-- ═══ صف اختيار الصيغة (مطابق للموكب) ═══ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_format"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorSecondary"
+                android:layout_marginEnd="10dp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/formatChipGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipMp4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MP4"
+                    android:checked="true"
+                    style="@style/Widget.App.Chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipMp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MP3"
+                    style="@style/Widget.App.Chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipWebm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WEBM"
+                    style="@style/Widget.App.Chip" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipM4a"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="M4A"
+                    style="@style/Widget.App.Chip" />
+            </com.google.android.material.chip.ChipGroup>
+        </LinearLayout>
+
+        <!-- ═══ بطاقة معلومات الفيديو قبل التحميل (مطابق للموكب) ═══ -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/infoCardContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="13dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/border_card"
+            app:cardBackgroundColor="?attr/colorSurface"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="11dp">
+
+                <!-- صورة مصغرة مع دائرة تشغيل وشارة مدة قابلة للنقر للمعاينة -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/infoThumbLayout"
+                    android:layout_width="62dp"
+                    android:layout_height="62dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/border_card"
+                    app:cardBackgroundColor="@color/vidmate_dark"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_thumb_gradient" />
+
+                        <ImageView
+                            android:id="@+id/infoThumbImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="@string/video_preview" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#26000000" />
+
+                        <View
+                            android:layout_width="23dp"
+                            android:layout_height="23dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/bg_play_circle" />
+
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_play"
+                            app:tint="@color/vidmate_red"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:id="@+id/infoDurText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|end"
+                            android:layout_margin="3dp"
+                            android:background="#9908090C"
+                            android:textColor="@color/white"
+                            android:textSize="9sp"
+                            android:textStyle="bold"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"
+                            android:paddingTop="1dp"
+                            android:paddingBottom="1dp"
+                            tools:text="10:34" />
+                    </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/infoTitleText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            android:textColor="?attr/colorOnSurface"
+                            tools:text="عنوان الفيديو الملتقط بجودة أصلية" />
+
+                        <ImageButton
+                            android:id="@+id/infoCloseBtn"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_delete"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            app:tint="?android:attr/textColorTertiary"
+                            android:contentDescription="@string/btn_close"
+                            android:scaleType="centerInside" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/infoChannelText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="11.5sp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginTop="1dp"
+                        android:singleLine="true"
+                        tools:text="اسم القناة" />
+
+                    <TextView
+                        android:id="@+id/infoUrlText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="10.5sp"
+                        android:textColor="?android:attr/textColorTertiary"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        tools:text="https://youtube.com/watch?v=..." />
+
+                    <TextView
+                        android:id="@+id/infoMetaChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_badge_pill"
+                        android:backgroundTint="#0F000000"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorSecondary"
+                        tools:text="1080p · MP4" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- مؤشر الحجم المتوقع المحدث ديناميكياً -->
+        <LinearLayout
+            android:id="@+id/estimatedSizeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_badge_pill"
+            android:backgroundTint="#141C63E1"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_info"
+                app:tint="@color/vidmate_red"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:id="@+id/estimatedSizeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/vidmate_red"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- ═══ صف أزرار التحكم (تحميل/إيقاف/استئناف) ═══ -->
+        <LinearLayout
+            android:id="@+id/downloadControlsRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="14dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/downloadBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="56dp"
+                android:text="@string/btn_download"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_download"
+                app:iconTint="@color/white"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/bg_download_btn"
+                app:cornerRadius="16dp"
+                android:elevation="6dp"
+                android:stateListAnimator="@null" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/pauseBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="56dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/status_paused"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_pause"
+                app:iconTint="@color/white"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/bg_stop_btn"
+                app:cornerRadius="16dp"
+                android:elevation="6dp"
+                android:visibility="gone"
+                android:stateListAnimator="@null" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/resumeBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="56dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/action_resume"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_play"
+                app:iconTint="@color/white"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/bg_resume_btn"
+                app:cornerRadius="16dp"
+                android:elevation="6dp"
+                android:visibility="gone"
+                android:stateListAnimator="@null" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:text="@string/action_cancel_download"
+                android:textColor="?attr/colorError"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                style="@style/Widget.Material3.Button.TonalButton"
+                app:cornerRadius="16dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- ═══ بطاقة التقدم (مطابق للموكب: عنوان + نسبة كبيرة + شريط) ═══ -->
+        <LinearLayout
+            android:id="@+id/progressCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:elevation="2dp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/progressTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/percentText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/vidmate_red"
+                    android:text="0%"
+                    android:layout_marginStart="12dp" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:max="100"
+                android:layoutDirection="ltr"
+                android:progressDrawable="@drawable/bg_progress_fill" />
+
+            <TextView
+                android:id="@+id/progressDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:layout_marginTop="8dp"
+                android:text="0 MB / 0 MB • 0 MB/s" />
+        </LinearLayout>
+
+        <!-- ═══ صف الزرّين الشبح (خيارات متقدمة / مسار التنزيل) ═══ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="14dp">
+
+            <!-- زر الخيارات المتقدمة (إظهار/إخفاء اللوحة) -->
+            <LinearLayout
+                android:id="@+id/advancedToggle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="46dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/bg_ghost_btn"
+                android:layout_marginEnd="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_advanced_options"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <ImageView
+                    android:id="@+id/advancedArrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="6dp"
+                    android:src="@drawable/ic_arrow_down"
+                    app:tint="?android:attr/textColorSecondary"
+                    android:contentDescription="@null" />
+            </LinearLayout>
+
+            <!-- زر مسار التنزيل (اختيار المجلد مباشرة) -->
+            <LinearLayout
+                android:id="@+id/pathGhostBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="46dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/bg_ghost_btn"
+                android:layout_marginStart="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_folder"
+                    app:tint="?android:attr/textColorSecondary"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_download_path"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:layout_marginStart="6dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ═══ لوحة الخيارات المتقدمة (مخفية افتراضياً) ═══ -->
+        <LinearLayout
+            android:id="@+id/advancedPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card"
+            android:padding="16dp"
+            android:elevation="1dp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone">
+
+            <!-- الجودة + الصيغة -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_quality"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginBottom="6dp" />
+
+                    <Spinner
+                        android:id="@+id/qualitySpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:background="@drawable/bg_url_input" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_format"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginBottom="6dp" />
+
+                    <Spinner
+                        android:id="@+id/formatSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="42dp"
+                        android:background="@drawable/bg_url_input" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- مسار التنزيل -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_download_path"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorSecondary"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="6dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/pathEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_weight="1"
+                    android:hint="@string/hint_path"
+                    android:textSize="11sp"
+                    android:maxLines="1"
+                    android:background="@drawable/bg_url_input"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:importantForAutofill="no" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/chooseFolderBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/btn_browse"
+                    android:textSize="13sp"
+                    app:icon="@drawable/ic_folder"
+                    app:iconSize="18dp"
+                    app:cornerRadius="8dp"
+                    style="@style/Widget.Material3.Button.OutlinedButton" />
+            </LinearLayout>
+
+            <!-- إصدار المحرك -->
+            <TextView
+                android:id="@+id/versionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/engine_default_label"
+                android:textSize="11sp"
+                android:textColor="?android:attr/textColorTertiary"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+
+        <!-- ═══ بطاقة السجل الداكنة (مطابق للموكب) ═══ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="14dp">
+
+            <LinearLayout
+                android:id="@+id/logHeaderRow"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="6dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_terminal"
+                    app:tint="?android:attr/textColorSecondary"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:id="@+id/logTitleText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/tv_log_title"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:layout_marginStart="8dp" />
+
+                <TextView
+                    android:id="@+id/logToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/log_arrow_expand"
+                    android:textSize="12sp"
+                    android:textColor="?android:attr/textColorTertiary" />
+            </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/logScroll"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:background="@drawable/bg_log_card"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/log"
+                    android:textColor="@color/log_text"
+                    android:fontFamily="monospace"
+                    android:textSize="10sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp" />
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

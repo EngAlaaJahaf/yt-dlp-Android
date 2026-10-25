@@ -1,55 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="12dp">
+    android:background="?android:attr/colorBackground">
 
-    <TextView android:text="⬇️ محمل الفيديو - yt-dlp" android:textSize="18sp" android:textStyle="bold"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  الشريط العلوي                                    -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        app:elevation="0dp">
 
-    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp">
-        <EditText android:id="@+id/urlEdit" android:hint="الصق الرابط هنا" android:layout_weight="1"
-            android:layout_width="0dp" android:layout_height="wrap_content" android:inputType="textUri" />
-        <Button android:id="@+id/pasteBtn" android:text="📋" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-    </LinearLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            app:contentInsetStartWithNavigation="0dp">
 
-    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
-        <Spinner android:id="@+id/qualitySpinner" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" />
-        <Spinner android:id="@+id/formatSpinner" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/brandContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
-        <EditText android:id="@+id/pathEdit" android:hint="مسار التنزيل" android:layout_weight="1"
-            android:layout_width="0dp" android:layout_height="wrap_content" android:textSize="12sp" android:maxLines="1" />
-        <Button android:id="@+id/chooseFolderBtn" android:text="📁 استعراض" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-        <Button android:id="@+id/resetPathBtn" android:text="🔄" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-    </LinearLayout>
+                <!-- أيقونة التطبيق الفعلية (الكلاكيت) التي تظهر في درج التطبيقات -->
+                <ImageView
+                    android:id="@+id/appLogo"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_app_logo_drawer"
+                    android:contentDescription="@null" />
 
-    <ProgressBar android:id="@+id/progress" style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:max="100" />
+                <!-- كلمة العلامة التجارية: Clip باللون الداكن و Catch بتدرج أحمر برتقالي -->
+                <LinearLayout
+                    android:id="@+id/brandWordmark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layoutDirection="ltr"
+                    android:layout_marginStart="8dp">
 
-    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
-        <Button android:id="@+id/downloadBtn" android:text="⬇️ تحميل الآن" android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" />
-        <Button android:id="@+id/stopBtn" android:text="⏹ إيقاف" android:layout_width="wrap_content" android:layout_height="wrap_content" android:enabled="false" />
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvBrandClip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clip"
+                        android:textSize="18.5sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:includeFontPadding="false" />
 
-    <Button android:id="@+id/openFolderBtn" android:text="📂 فتح مجلد التحميل" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" />
+                    <TextView
+                        android:id="@+id/tvBrandCatch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Catch"
+                        android:textSize="18.5sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/vidmate_red"
+                        android:includeFontPadding="false" />
+                </LinearLayout>
 
-    <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp">
-        <TextView android:id="@+id/versionText" android:text="النسخة: ..." android:layout_weight="1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_gravity="center_vertical" />
+                <!-- عنوان الأقسام الأخرى (التنزيلات، المكتبة، الإعدادات) -->
+                <TextView
+                    android:id="@+id/toolbarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginStart="8dp"
+                    android:visibility="gone"
+                    tools:text="التنزيلات" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <Button
-            android:id="@+id/updateBtn"
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  حاوية الأقسام (تتنقل بين التبويبات بدون إعادة فتح نافذة) -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="64dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  شريط التنقل السفلي الثابت                           -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorSurface"
+        app:elevation="0dp"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:itemActiveIndicatorStyle="@style/Widget.App.NavIndicator"
+        app:itemRippleColor="#1A1C63E1"
+        app:menu="@menu/bottom_nav"
+        app:labelVisibilityMode="labeled" />
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  شاشة البداية (Splash Overlay مع حلقة العد)      -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <FrameLayout
+        android:id="@+id/splashOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/colorBackground"
+        android:elevation="20dp"
+        android:visibility="gone">
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🔄 تحديث المحرك" />
-    </LinearLayout>
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center">
 
-    <TextView android:text="السجل:" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" />
-    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:background="#0f1117" android:layout_marginTop="4dp">
-        <TextView android:id="@+id/log" android:textColor="#d6deeb" android:fontFamily="monospace" android:textSize="11sp"
-            android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="8dp" />
-    </ScrollView>
+            <ImageView
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:src="@drawable/ic_app_logo_drawer"
+                android:contentDescription="@null" />
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layoutDirection="ltr"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:id="@+id/tvSplashClip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clip"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:includeFontPadding="false" />
+
+                <TextView
+                    android:id="@+id/tvSplashCatch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Catch"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/vidmate_red"
+                    android:includeFontPadding="false" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/splash_subtitle"
+                android:textSize="12.5sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="مدعوم بمحرك yt-dlp"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/vidmate_red"
+                android:background="@drawable/bg_badge_pill"
+                android:backgroundTint="#141C63E1"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:layout_marginTop="10dp" />
+
+            <com.ytdlpgui.ui.common.ClipCountdownView
+                android:id="@+id/splashCountdown"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="22dp" />
+        </LinearLayout>
+
+        <!-- حلقة العد + زر التخطي في الأسفل -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/splashSkipBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="48dp"
+            android:text="@string/btn_skip"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

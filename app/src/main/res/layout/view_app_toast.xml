@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toastRoot"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|center_horizontal"
+    android:layout_marginBottom="88dp"
+    android:layout_marginStart="28dp"
+    android:layout_marginEnd="28dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_app_toast"
+    android:elevation="14dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="9dp"
+    android:paddingBottom="9dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- أيقونة التطبيق الفعلية (الكلاكيت بالتدرج الكامل) -->
+    <ImageView
+        android:id="@+id/toastIcon"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_app_logo_drawer"
+        android:contentDescription="@null" />
+
+    <!-- نص رسالة التنبيه -->
+    <TextView
+        android:id="@+id/toastText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="13sp"
+        android:fontFamily="@font/cairo_bold"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:maxWidth="280dp"
+        tools:text="الصق رابطاً أولاً" />
+</LinearLayout>

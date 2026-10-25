@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- ═══ ألوان أساسية ═══ -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,6 +8,95 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary_red">#FFE11D48</color>
-    <color name="primary_blue">#FF2563EB</color>
+
+    <!-- ═══ هوية وألوان ClipCatch الجديدة (المطابقة لأيقونة التطبيق: تركواز زمردي إلى أزرق كهربائي) ═══ -->
+    <color name="brand_green">#FF00B36E</color>
+    <color name="brand_cyan">#FF0596A0</color>
+    <color name="brand_blue">#FF1C63E1</color>
+    <color name="brand_blue_dark">#FF1246AA</color>
+
+    <!-- الألوان الأساسية المتوافقة مع الشعار -->
+    <color name="vidmate_red">#FF1C63E1</color>
+    <color name="vidmate_orange">#FF00B36E</color>
+    <color name="vidmate_dark">#FF15161A</color>
+
+    <color name="primary_purple">#FF1C63E1</color>
+    <color name="primary_purple_light">#FF00B36E</color>
+
+    <!-- الخلفية والسطح (الوضع الفاتح) -->
+    <color name="bg_light">#FFF2F4F7</color>
+    <color name="surface_light">#FFFFFFFF</color>
+    <color name="surface_hover_light">#FFF0F4F8</color>
+    <color name="border_light">#FFE2E8F0</color>
+    <color name="border_card">#14000000</color>
+    <color name="settings_icon_bg">#FFF0F4F8</color>
+    <color name="stepper_btn_bg">#FFF0F4F8</color>
+
+    <!-- النصوص (الوضع الفاتح) -->
+    <color name="text_primary_light">#FF1A202C</color>
+    <color name="text_secondary_light">#FF718096</color>
+    <color name="text_tertiary_light">#FFA0AEC0</color>
+
+    <!-- الخلفية والسطح (الوضع الداكن) -->
+    <color name="bg_dark">#FF0F172A</color>
+    <color name="surface_dark">#FF1E293B</color>
+    <color name="surface_hover_dark">#FF334155</color>
+    <color name="border_dark">#FF334155</color>
+
+    <!-- النصوص (الوضع الداكن) -->
+    <color name="text_primary_dark">#FFF8FAFC</color>
+    <color name="text_secondary_dark">#FF94A3B8</color>
+    <color name="text_tertiary_dark">#FF64748B</color>
+
+    <!-- ألوان الإجراءات والتحميل (تدرج مطابق لأيقونة التطبيق تماماً) -->
+    <color name="download_start">#FF00B36E</color>
+    <color name="download_end">#FF1C63E1</color>
+    <color name="stop_color">#FFF57C00</color>
+
+    <!-- حالات التحميل (Status Badges) -->
+    <color name="status_queued">#FF7C4DFF</color>
+    <color name="status_queued_bg">#1F7C4DFF</color>
+    <color name="status_running">#FF00B36E</color>
+    <color name="status_running_bg">#2000B36E</color>
+    <color name="status_paused">#FFF57C00</color>
+    <color name="status_paused_bg">#26F57C00</color>
+    <color name="status_done">#FF00B36E</color>
+    <color name="status_done_bg">#2000B36E</color>
+    <color name="status_failed">#FFE53935</color>
+    <color name="status_failed_bg">#22E53935</color>
+
+    <!-- ألوان دلالية أخرى -->
+    <color name="primary_red">#FF1C63E1</color>
+    <color name="primary_blue">#FF1C63E1</color>
+    <color name="action_download">#FF1C63E1</color>
+    <color name="action_cancel">#FFE53935</color>
+    <color name="action_navigate">#FF00B36E</color>
+    <color name="action_neutral">#FF718096</color>
+    <color name="action_engine">#FF1C63E1</color>
+    <color name="status_queued_color">#FF7C4DFF</color>
+
+    <!-- الشريط السفلي (مطابق لهوية الأيقونة الزرقاء المخضرة) -->
+    <color name="nav_active">#FF1C63E1</color>
+    <color name="nav_inactive">#FF94A3B8</color>
+    <color name="nav_active_light">#FF1C63E1</color>
+    <color name="nav_inactive_light">#FF94A3B8</color>
+    <color name="nav_active_dark">#FF00B36E</color>
+    <color name="nav_inactive_dark">#FF64748B</color>
+
+    <!-- ألوان متسقة عبر الوضعين (تُتجاوز في values-night) -->
+    <color name="text_on_surface">#FF1A202C</color>
+    <color name="chip_idle">#FFFFFFFF</color>
+    <color name="text_on_surface_secondary">#FF718096</color>
+
+    <!-- شريط التقدم -->
+    <color name="progress_track_light">#FFE2E8F0</color>
+    <color name="progress_track_dark">#FF334155</color>
+
+    <!-- Chip Selected -->
+    <color name="chip_selected_bg_light">#1A1C63E1</color>
+    <color name="chip_selected_bg_dark">#2A1C63E1</color>
+
+    <!-- السجل -->
+    <color name="log_bg">#FF0F172A</color>
+    <color name="log_text">#FFF8FAFC</color>
 </resources>

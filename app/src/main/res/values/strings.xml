@@ -1,3 +1,195 @@
 <resources>
-    <string name="app_name">yt-dlp GUI</string>
+    <string name="app_name">ClipCatch</string>
+
+    <!-- الشاشة الرئيسية -->
+    <string name="app_title">ClipCatch</string>
+    <string name="hint_url">الصق رابط الفيديو هنا…</string>
+    <string name="hint_path">مسار التنزيل</string>
+    <string name="btn_paste">لصق</string>
+    <string name="btn_info">معلومات</string>
+    <string name="msg_fetching_info">جارٍ جلب معلومات الفيديو…</string>
+    <string name="info_dialog_title">معلومات الفيديو</string>
+    <string name="info_title_label">العنوان: %1$s</string>
+    <string name="info_channel_label">القناة: %1$s</string>
+    <string name="info_duration_label">المدة: %1$s</string>
+    <string name="info_extractor_label">المصدر: %1$s</string>
+    <string name="info_source_quality">الجودة المصدر: %1$s</string>
+    <string name="msg_playlist_not_supported">هذا رابط قائمة تشغيل — المعاينة غير مدعومة حسب الإعدادات</string>
+    <string name="playlist_dialog_title">قائمة تشغيل</string>
+    <string name="msg_playlist_count">تحتوي هذه القائمة على %1$d عنصراً. سيُضاف كل عنصر كصف مستقل في الطابور (تنزيل متوازٍ).</string>
+    <string name="btn_download_all">تنزيل الكل (%1$d)</string>
+    <string name="btn_settings">الإعدادات</string>
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_cookies_section">ملفات Cookies (للمواقع التي تتطلب تسجيل دخول)</string>
+    <string name="settings_cookies_hint">صدّر ملف cookies.txt بصيغة Netscape من متصفحك (باستخدام إضافة مثل \"Get cookies.txt\")، ثم استورده هنا. سيُستخدم في كل التنزيلات الجديدة.</string>
+    <string name="settings_cookies_active">ملف Cookies مستورد وسيُستخدم في التنزيلات الجديدة</string>
+    <string name="settings_cookies_none">لا يوجد ملف Cookies</string>
+    <string name="btn_import_cookies">استيراد cookies.txt</string>
+    <string name="btn_remove_cookies">إزالة</string>
+    <string name="msg_cookies_imported">تم استيراد ملف Cookies</string>
+    <string name="msg_cookies_import_failed">فشل استيراد الملف — حاول مجدداً</string>
+    <string name="msg_cookies_removed">تمت إزالة ملف Cookies</string>
+    <string name="settings_about_section">حول التطبيق</string>
+    <string name="settings_appearance_section">المظهر</string>
+    <string name="label_dark_mode">الوضع الليلي</string>
+    <string name="label_dark_mode_desc">مظهر داكن متسق عبر كل الشاشات</string>
+    <string name="msg_theme_dark_on">تم تفعيل الوضع الليلي</string>
+    <string name="msg_theme_dark_off">تم الرجوع للوضع الفاتح</string>
+    <string name="settings_engine_version">إصدار محرك yt-dlp: %1$s</string>
+    <string name="settings_app_version">إصدار التطبيق: %1$s</string>
+    <string name="btn_back">رجوع</string>
+    <string name="btn_close">إغلاق</string>
+    <string name="btn_browse">استعراض</string>
+    <string name="btn_reset">إعادة</string>
+    <string name="btn_download">تحميل الآن</string>
+    <string name="btn_stop">إيقاف التحميل</string>
+    <string name="btn_open_folder">فتح مجلد التحميل</string>
+    <string name="btn_downloads">سجل التنزيلات والطابور</string>
+    <string name="btn_library">مكتبة التنزيلات</string>
+    <string name="btn_update_engine">تحديث المحرك</string>
+    <string name="btn_refresh">تحديث</string>
+    <string name="progress_percent">%1$d%%</string>
+    <string name="tv_log_title">السجل</string>
+    <string name="log_arrow_collapse">▲</string>
+    <string name="log_arrow_expand">▼</string>
+    <string name="engine_default_label">النسخة: …</string>
+
+    <!-- التنقل السفلي -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_downloads">التنزيلات</string>
+    <string name="nav_library">المكتبة</string>
+
+    <!-- عنوان بطاقة الرابط -->
+    <string name="label_video_url">رابط الفيديو</string>
+    <string name="label_download_type">نوع التحميل</string>
+    <string name="label_advanced_options">خيارات متقدمة</string>
+    <string name="label_quality">الجودة</string>
+    <string name="label_format">الصيغة</string>
+    <string name="label_download_path">مسار التنزيل</string>
+
+    <!-- الشاشة الرئيسية: رسائل -->
+    <string name="msg_folder_selected">تم اختيار المجلد: %1$s</string>
+    <string name="msg_folder_selected_plain">تم اختيار المجلد</string>
+    <string name="msg_folder_may_not_write">تنبيه: قد لا يقبل هذا المجلد الكتابة على هذا الجهاز</string>
+    <string name="msg_engine_init_failed">فشل تهيئة المحرك — اضغط تحديث المحرك لإعادة المحاولة</string>
+    <string name="msg_clipboard_empty">الحافظة فارغة</string>
+    <string name="msg_insert_url_first">الصق رابطاً أولاً</string>
+    <string name="msg_path_restored">تمت استعادة المسار الافتراضي</string>
+    <string name="msg_current_path">المسار: %1$s</string>
+    <string name="msg_link_received">تم استلام الرابط من المشاركة</string>
+    <string name="msg_permissions_hint">لم تُمنح بعض الصلاحيات — قد لا تعمل بعض الميزات. يمكن منحها من إعدادات النظام.</string>
+    <string name="msg_already_downloaded">تم تحميل هذا الفيديو من قبل — يوجد في سجل التنزيلات</string>
+    <string name="msg_already_in_queue">هذا الفيديو مُدرج بالفعل في طابور التنزيل</string>
+    <string name="msg_playlist_skipped_fmt">تم تخطي %1$d عنصر لأنه تم تحميله من قبل</string>
+    <string name="msg_download_completed_fmt">اكتمل التحميل: %1$s</string>
+    <string name="msg_download_failed_fmt">فشل التحميل: %1$s</string>
+    <string name="msg_download_item_generic">عنصر من الطابور</string>
+    <string name="msg_engine_updated_fmt">تم تحديث محرك yt-dlp بنجاح: %1$s</string>
+    <string name="msg_engine_already_latest">محرك yt-dlp محدث بالفعل إلى آخر إصدار: %1$s</string>
+    <string name="msg_engine_update_failed_fmt">تعذر تحديث المحرك: %1$s</string>
+
+    <!-- شاشة التنزيلات -->
+    <string name="downloads_title">التنزيلات</string>
+    <string name="tab_all">الكل</string>
+    <string name="tab_running">جارٍ</string>
+    <string name="tab_done">مكتمل</string>
+    <string name="tab_failed">فشل</string>
+    <string name="summary_downloads_fmt">إجمالي: %1$d • مكتمل: %2$d</string>
+    <string name="btn_clear_finished">حذف المكتملات</string>
+    <string name="downloads_empty">لا توجد تنزيلات بعد</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_cancel_download">إلغاء</string>
+    <string name="action_retry">إعادة</string>
+    <string name="action_resume">استئناف</string>
+    <string name="estimated_size_fmt">الحجم الفعلي: %1$s</string>
+
+    <!-- حالات التنزيل -->
+    <string name="status_queued">في الطابور</string>
+    <string name="status_running">جارٍ التنزيل</string>
+    <string name="status_done">مكتمل</string>
+    <string name="status_failed">فشل</string>
+    <string name="status_cancelled">ملغي</string>
+    <string name="status_paused">متوقف مؤقتاً</string>
+
+    <!-- الإشعارات -->
+    <string name="notif_channel_name">التنزيلات</string>
+    <string name="notif_channel_desc">إشعارات تنزيل الفيديوهات</string>
+    <string name="notif_title">تنزيل ClipCatch</string>
+    <string name="notif_progress">جارٍ التنزيل… %1$d%%</string>
+
+    <!-- المكتبة -->
+    <string name="library_title">المكتبة</string>
+    <string name="library_empty">لا توجد ملفات محمّلة بعد — حمّل شيئاً أولاً</string>
+    <string name="lib_delete">حذف الملف</string>
+    <string name="lib_deleted">تم حذف الملف</string>
+    <string name="lib_player_title">مشغل ClipCatch</string>
+    <string name="btn_play">تشغيل</string>
+    <string name="btn_delete_short">حذف</string>
+    <string name="msg_playback_failed">تعذر تشغيل الملف — الصيغة غير مدعومة من المشغل</string>
+    <string name="msg_delete_confirm">سيُحذف هذا الملف نهائياً من التخزين. متأكد؟</string>
+    <string name="msg_delete_failed">تعذر حذف الملف</string>
+
+    <!-- مصفوفات الخيارات -->
+    <string-array name="quality_options">
+        <item>الأفضل تلقائياً (best)</item>
+        <item>1080p</item>
+        <item>720p</item>
+        <item>480p</item>
+        <item>360p</item>
+    </string-array>
+
+    <string-array name="format_options">
+        <item>فيديو MP4</item>
+        <item>فيديو MKV</item>
+        <item>فيديو WebM</item>
+        <item>صوت MP3</item>
+        <item>صوت M4A</item>
+        <item>صوت OPUS</item>
+        <item>صوت FLAC</item>
+        <item>صوت WAV</item>
+    </string-array>
+
+    <string name="splash_subtitle">محرك yt-dlp جاهز للعمل</string>
+    <string name="btn_skip">تخطي</string>
+
+    <!-- إعدادات إضافية مطابقة للواجهة المرجعية -->
+    <string name="settings_path_section">مسار التنزيل</string>
+    <string name="settings_network_section">الشبكة</string>
+    <string name="settings_wifi_only">التحميل عبر WiFi فقط</string>
+    <string name="settings_wifi_only_desc">إيقاف التنزيل تلقائيًا عند التحوّل للبيانات الخلوية</string>
+    <string name="settings_max_concurrent">أقصى عدد للتحميلات المتزامنة</string>
+    <string name="settings_max_concurrent_desc">عدد المهام التي تعمل في نفس الوقت</string>
+    <string name="settings_bg_download">التحميل في الخلفية</string>
+    <string name="settings_bg_download_desc">متابعة التنزيل حتى مع إغلاق التطبيق</string>
+    <string name="settings_engine_section">المحرك</string>
+    <string name="settings_engine_desc">إصدار المحرك yt-dlp</string>
+    <string name="settings_cookies_row_desc">لتنزيلات المحتوى المقيد بالعمر أو المشاركة</string>
+    <string name="settings_history_section">سجل السلوك</string>
+    <string name="settings_save_history">حفظ سجل التنزيلات</string>
+    <string name="settings_save_history_desc">تذكّر كل تنزيل وبحث سابق</string>
+    <string name="settings_clear_history">مسح سجل التنزيلات</string>
+    <string name="settings_clear_history_desc">إزالة جميع عناصر السجل نهائيًا</string>
+    <string name="settings_general_section">عام</string>
+    <string name="settings_appearance">مظهر التطبيق</string>
+    <string name="settings_about">عن ClipCatch</string>
+    <string name="settings_about_desc">الإصدار %1$s · محرك yt-dlp مدفون</string>
+    <string name="btn_clear">مسح</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_dark">داكن</string>
+
+    <!-- المكتبة: بحث وتصنيفات -->
+    <string name="lib_search_hint">ابحث في المكتبة…</string>
+    <string name="filter_all">الكل</string>
+    <string name="filter_video">فيديو</string>
+    <string name="filter_audio">صوت</string>
+
+    <!-- الرئيسية -->
+    <string name="home_search_hint">ابحث أو الصق الرابط…</string>
+    <string name="home_search_go">تحميل</string>
+
+    <!-- معاينة الفيديو -->
+    <string name="video_preview">معاينة الفيديو</string>
+    <string name="watch_video">مشاهدة الفيديو</string>
+    <string name="real_size_label">الحجم الفعلي: %1$s</string>
+    <string name="estimated_size_label">الحجم التقديري: %1$s</string>
 </resources>

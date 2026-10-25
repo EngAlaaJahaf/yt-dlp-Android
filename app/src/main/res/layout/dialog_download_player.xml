@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_sheet_top_rounded"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="20dp">
+
+    <!-- مقبض النافذة العلوي -->
+    <View
+        android:layout_width="38dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_badge_pill"
+        android:backgroundTint="?attr/colorOutlineVariant"
+        android:layout_marginBottom="8dp" />
+
+    <!-- الشريط العلوي: زر الإغلاق + العنوان والبيانات الوصفية -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/btnClosePlayer"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close"
+            app:tint="?attr/colorOnSurface"
+            android:contentDescription="@string/btn_close" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:id="@+id/playerTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="?attr/colorOnSurface"
+                tools:text="درس: أساسيات Flask — بناء واجهات REST بذكاء" />
+
+            <TextView
+                android:id="@+id/playerSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginTop="2dp"
+                tools:text="YouTube · 780 MB · MP4" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- شاشة معاينة الفيديو بنسبة 16:9 مع زر التشغيل الكبير وشارة المدة (الصورة 3) -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/playerPreviewBox"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="14dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#FF101218">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- خلفية متدرجة سينمائية أو الصورة المصغّرة الحقيقية -->
+            <ImageView
+                android:id="@+id/playerThumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_thumb_gradient"
+                android:contentDescription="@null" />
+
+            <!-- طبقة تظليل سينمائية خفيفة لتوضيح زر التشغيل والمدة -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#26000000" />
+
+            <!-- زر التشغيل الدائري المركزي الكبير (مطابق للصورة 3) -->
+            <FrameLayout
+                android:id="@+id/btnCenterPlay"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_center_play_btn"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/centerPlayArrow"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_play"
+                    app:tint="@color/white"
+                    android:contentDescription="@string/btn_play" />
+            </FrameLayout>
+
+            <!-- شارة مدة الفيديو في زاوية النهاية السفلية (مثل: 28:16) -->
+            <TextView
+                android:id="@+id/playerDurationBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_badge_pill"
+                android:backgroundTint="#B308090C"
+                android:textColor="@color/white"
+                android:textSize="10.5sp"
+                android:textStyle="bold"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                tools:text="28:16" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- شريط تقدم المشاهدة (Scrubber Bar) -->
+    <SeekBar
+        android:id="@+id/playerScrubber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:max="1000"
+        android:progress="0"
+        android:progressTint="@color/vidmate_red"
+        android:thumbTint="@color/vidmate_red" />
+
+    <!-- التوقيت الحالي والإجمالي -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp">
+
+        <TextView
+            android:id="@+id/playerCurrentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:text="0:00" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/playerTotalTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            tools:text="28:16" />
+    </LinearLayout>
+
+    <!-- أزرار التحكم السفلية الأربعة (الصورة 3: 10- ث، مشاركة، حذف، 10+ ث) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="4dp">
+
+        <!-- 10- ثانية -->
+        <LinearLayout
+            android:id="@+id/btnReplay10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_replay_10"
+                app:tint="?attr/colorOnSurface"
+                android:contentDescription="10- ث" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10.5sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginTop="3dp"
+                android:text="10- ث" />
+        </LinearLayout>
+
+        <!-- حذف (باللون الأحمر) -->
+        <LinearLayout
+            android:id="@+id/btnDeletePlayer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_delete"
+                app:tint="?attr/colorError"
+                android:contentDescription="@string/btn_delete_short" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10.5sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorError"
+                android:layout_marginTop="3dp"
+                android:text="حذف" />
+        </LinearLayout>
+
+        <!-- مشاركة -->
+        <LinearLayout
+            android:id="@+id/btnSharePlayer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_share"
+                app:tint="?attr/colorOnSurface"
+                android:contentDescription="مشاركة" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10.5sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginTop="3dp"
+                android:text="مشاركة" />
+        </LinearLayout>
+
+        <!-- 10+ ثانية -->
+        <LinearLayout
+            android:id="@+id/btnForward10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_forward_10"
+                app:tint="?attr/colorOnSurface"
+                android:contentDescription="10+ ث" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10.5sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginTop="3dp"
+                android:text="10+ ث" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

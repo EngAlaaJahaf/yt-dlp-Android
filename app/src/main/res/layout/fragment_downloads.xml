@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <!-- ═══ محتوى التنزيلات الرئيسي ═══ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="52dp">
+
+        <!-- تبويبات التصفية بأسلوب فيدميت (الكل، جارٍ، مكتمل، فشل) -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/downloadTabs"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_card"
+            app:tabIndicatorColor="@color/vidmate_red"
+            app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="@color/vidmate_red"
+            app:tabTextColor="?attr/colorOnSurfaceVariant"
+            app:tabMode="fixed"
+            app:tabGravity="fill" />
+
+        <!-- بطاقة الحالة الفارغة -->
+        <LinearLayout
+            android:id="@+id/emptyContainer"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card"
+            android:padding="32dp"
+            android:layout_marginTop="20dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:src="@drawable/ic_nav_downloads"
+                app:tint="@color/vidmate_red"
+                android:alpha="0.8"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:id="@+id/emptyText"
+                android:text="@string/downloads_empty"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorSecondary"
+                android:gravity="center"
+                android:layout_marginTop="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- قائمة التنزيلات -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/downloadsList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
+    </LinearLayout>
+
+    <!-- ═══ طبقة التعتيم الخلفية عند فتح لوحة المقبض ═══ -->
+    <View
+        android:id="@+id/dsheetScrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#590B0C10"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- ═══ لوحة المقبض السفلي الثابتة فوق شريط التنقل (الصور 4 و 5) ═══ -->
+    <LinearLayout
+        android:id="@+id/dsheetContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:background="@drawable/bg_sheet_grip_card"
+        android:elevation="6dp">
+
+        <!-- مقبض السحب/النقر (الصورة 4: عنصر واحد · 640 MB إجمالي ˅) -->
+        <LinearLayout
+            android:id="@+id/dsheetGrip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="9dp">
+
+            <!-- مؤشر الشريط الرمادي -->
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4.5dp"
+                android:background="@drawable/bg_badge_pill"
+                android:backgroundTint="?attr/colorOutlineVariant" />
+
+            <!-- نص إجمالي الملفات والحجم مع سهم التوسيع/الطي -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/gripText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12.5sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    tools:text="عنصر واحد · 640 MB إجمالي" />
+
+                <ImageView
+                    android:id="@+id/gripChevron"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/ic_chevron_down"
+                    app:tint="?attr/colorOnSurfaceVariant"
+                    android:contentDescription="@null" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- جسم اللوحة الممتدة (الصورة 5) -->
+        <LinearLayout
+            android:id="@+id/dsheetBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
+            android:visibility="gone">
+
+            <!-- عنوان القسم: حسب الحالة -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="حسب الحالة"
+                android:textSize="11.5sp"
+                android:textStyle="bold"
+                android:textColor="@color/vidmate_red"
+                android:layout_marginTop="6dp" />
+
+            <!-- شريط التقدم المقسم متعدد الألوان بحسب الحالات (الصورة 5) -->
+            <LinearLayout
+                android:id="@+id/statbarContainer"
+                android:layout_width="match_parent"
+                android:layout_height="9dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_badge_pill"
+                android:backgroundTint="?attr/colorSurfaceVariant"
+                android:layout_marginTop="8dp">
+
+                <View
+                    android:id="@+id/segQueued"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="#7C4DFF" />
+
+                <View
+                    android:id="@+id/segRunning"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="#FFB300" />
+
+                <View
+                    android:id="@+id/segPaused"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="#F57C00" />
+
+                <View
+                    android:id="@+id/segDone"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#43A047" />
+
+                <View
+                    android:id="@+id/segFailed"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:background="#E53935" />
+            </LinearLayout>
+
+            <!-- مفتاح الحالات (السطر الأول: في الطابور، جارٍ، متوقف) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="9dp">
+
+                <!-- في الطابور -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:background="#7C4DFF" />
+
+                    <TextView
+                        android:id="@+id/legendQueued"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginStart="4dp"
+                        tools:text="في الطابور (0)" />
+                </LinearLayout>
+
+                <!-- جارٍ التحميل -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:background="#FFB300" />
+
+                    <TextView
+                        android:id="@+id/legendRunning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginStart="4dp"
+                        tools:text="جارٍ التحميل (0)" />
+                </LinearLayout>
+
+                <!-- متوقّف مؤقتًا -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:background="#F57C00" />
+
+                    <TextView
+                        android:id="@+id/legendPaused"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginStart="4dp"
+                        tools:text="متوقّف مؤقتًا (0)" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- مفتاح الحالات (السطر الثاني: مكتمل، فشل) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
+
+                <!-- مكتمل -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:background="#43A047" />
+
+                    <TextView
+                        android:id="@+id/legendDone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginStart="4dp"
+                        tools:text="مكتمل (1)" />
+                </LinearLayout>
+
+                <!-- فشل -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <View
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:background="#E53935" />
+
+                    <TextView
+                        android:id="@+id/legendFailed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginStart="4dp"
+                        tools:text="فشل (0)" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <!-- عنوان القسم: أحدث التنزيلات -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="أحدث التنزيلات"
+                android:textSize="11.5sp"
+                android:textStyle="bold"
+                android:textColor="@color/vidmate_red"
+                android:layout_marginTop="15dp" />
+
+            <!-- بطاقة أحدث عنصر تم تنزيله (الصورة 5) -->
+            <LinearLayout
+                android:id="@+id/recentItemCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+                <!-- شارة الحالة الخضراء -->
+                <TextView
+                    android:id="@+id/recentStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="#FF43A047"
+                    android:background="@drawable/bg_badge_pill"
+                    android:backgroundTint="#1A43A047"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    tools:text="• مكتمل" />
+
+                <!-- عنوان وحجم الملف الأحدث -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="10dp">
+
+                    <TextView
+                        android:id="@+id/recentTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="?attr/colorOnSurface"
+                        tools:text="مؤتمر القاهرة للأمن السيبراني 2026 — الج..." />
+
+                    <TextView
+                        android:id="@+id/recentMeta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="10.5sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginTop="2dp"
+                        tools:text="640 MB · MP4" />
+                </LinearLayout>
+
+                <!-- أيقونة المصغرة المتدرجة المربعة مع زر تشغيل -->
+                <FrameLayout
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/bg_thumb_gradient">
+
+                    <ImageView
+                        android:id="@+id/recentMediaIcon"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_play"
+                        app:tint="@color/white"
+                        android:contentDescription="@null" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- زر مسح المكتملة ذو الإطار الأحمر (الصورة 5) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClearCompletedSheet"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="16dp"
+                android:text="مسح المكتملة"
+                android:textSize="13.5sp"
+                android:textStyle="bold"
+                android:textColor="#C62828"
+                app:cornerRadius="12dp"
+                app:strokeWidth="1.4dp"
+                app:strokeColor="#73E53935"
+                android:backgroundTint="#0DE53935"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
